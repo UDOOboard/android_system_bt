@@ -22,6 +22,7 @@
  *  definitions.
  *
  ******************************************************************************/
+// sekjflksdjlfkjsd
 #ifndef BTM_API_H
 #define BTM_API_H
 
@@ -882,6 +883,7 @@ typedef void (tBTM_ACL_DB_CHANGE_CB) (BD_ADDR p_bda, DEV_CLASS p_dc,
                                       BD_NAME p_bdn, UINT8 *features,
                                       BOOLEAN is_new);
 #endif
+// sekjflksdjlfkjsd
 /*****************************************************************************
 **  SCO CHANNEL MANAGEMENT
 *****************************************************************************/

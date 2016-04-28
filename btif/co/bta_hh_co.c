@@ -195,7 +195,7 @@ static inline pthread_t create_thread(void *(*start_routine)(void *), void * arg
 static void *btif_hh_poll_event_thread(void *arg)
 {
     btif_hh_device_t *p_dev = arg;
-    APPL_TRACE_DEBUG("%s: Thread created fd = %d", __FUNCTION__, p_dev->fd);
+    APPL_TRACE_DEBUG("%s: Thread created fd = %d", __func__, p_dev->fd);
     struct pollfd pfds[1];
     int ret;
 
@@ -208,15 +208,14 @@ static void *btif_hh_poll_event_thread(void *arg)
     while(p_dev->hh_keep_polling){
         ret = poll(pfds, 1, 50);
         if (ret < 0) {
-            APPL_TRACE_ERROR("%s: Cannot poll for fds: %s\n", __FUNCTION__, strerror(errno));
+            APPL_TRACE_ERROR("%s: Cannot poll for fds: %s\n", __func__, strerror(errno));
             break;
         }
         if (pfds[0].revents & POLLIN) {
-            APPL_TRACE_DEBUG("btif_hh_poll_event_thread: POLLIN");
+            APPL_TRACE_DEBUG("%s: POLLIN", __func__);
             ret = uhid_event(p_dev);
-            if (ret){
+            if (ret != -EINTR)
                 break;
-            }
         }
     }
 
@@ -426,7 +425,7 @@ void bta_hh_co_data(UINT8 dev_handle, UINT8 *p_rpt, UINT16 len, tBTA_HH_PROTO_MO
     }
 
     // Send the HID data to the kernel.
-    if (p_dev->fd >= 0) {
+    if ((p_dev->fd >= 0) && p_dev->ready_for_data) {
         bta_hh_co_write(p_dev->fd, p_rpt, len);
     }else {
         APPL_TRACE_WARNING("%s: Error: fd = %d, ready %d, len = %d", __FUNCTION__, p_dev->fd, 
