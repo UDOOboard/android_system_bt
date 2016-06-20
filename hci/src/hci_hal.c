@@ -21,6 +21,8 @@
 const hci_hal_t *hci_hal_get_interface() {
 #if HCI_USE_MCT
   return hci_hal_mct_get_interface();
+#elif HCI_USE_USB
+  return hci_hal_usb_get_interface();
 #else
   return hci_hal_h4_get_interface();
 #endif

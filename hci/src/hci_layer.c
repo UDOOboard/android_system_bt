@@ -599,6 +599,10 @@ static void hal_says_data_ready(serial_data_type_t type) {
       incoming->buffer->len = incoming->index;
       btsnoop->capture(incoming->buffer, true);
 
+      /* with USB Dongle anticipate packet finished operation */
+#ifdef HCI_USE_USB 
+         hal->packet_finished(type);
+#endif
       if (type != DATA_TYPE_EVENT) {
         packet_fragmenter->reassemble_and_dispatch(incoming->buffer);
       } else if (!filter_incoming_event(incoming->buffer)) {
@@ -617,7 +621,9 @@ static void hal_says_data_ready(serial_data_type_t type) {
       // We don't control the buffer anymore
       incoming->buffer = NULL;
       incoming->state = BRAND_NEW;
+#ifndef HCI_USE_USB 
       hal->packet_finished(type);
+#endif
 
       // We return after a packet is finished for two reasons:
       // 1. The type of the next packet could be different.

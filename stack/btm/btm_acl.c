@@ -1301,6 +1301,8 @@ tBTM_STATUS BTM_SetLinkSuperTout (BD_ADDR remote_bda, UINT16 timeout)
         p->link_super_tout = timeout;
 
         /* Only send if current role is Master; 2.0 spec requires this */
+        /* This command breaks some USB communication on BT DONGLE */
+#ifndef HCI_USE_USB
         if (p->link_role == BTM_ROLE_MASTER)
         {
             if (!btsnd_hcic_write_link_super_tout (LOCAL_BR_EDR_CONTROLLER_ID,
@@ -1311,6 +1313,7 @@ tBTM_STATUS BTM_SetLinkSuperTout (BD_ADDR remote_bda, UINT16 timeout)
         }
         else
             return(BTM_SUCCESS);
+#endif
     }
 
     /* If here, no BD Addr found */

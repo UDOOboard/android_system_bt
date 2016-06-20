@@ -78,7 +78,9 @@ static void init(thread_t *post_thread) {
   assert(post_thread != NULL);
   thread = post_thread;
 
+#ifndef HCI_USE_USB
   vendor->set_callback(VENDOR_SET_LPM_MODE, vendor_enable_disable_callback);
+#endif
 
   idle_alarm = alarm_new();
   if (!idle_alarm) {
@@ -146,9 +148,11 @@ static void enable(bool enable) {
   } else {
     uint8_t command = enable ? BT_VND_LPM_ENABLE : BT_VND_LPM_DISABLE;
     state = enable ? LPM_ENABLING : LPM_DISABLING;
+#ifndef HCI_USE_USB
     if (state == LPM_ENABLING)
         vendor->send_command(VENDOR_GET_LPM_IDLE_TIMEOUT, &idle_timeout_ms);
     vendor->send_async_command(VENDOR_SET_LPM_MODE, &command);
+#endif
   }
 }
 

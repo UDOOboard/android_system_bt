@@ -5796,7 +5796,7 @@ static void btm_sec_collision_timeout (TIMER_LIST_ENT *p_tle)
 
 /*******************************************************************************
 **
-** Function         btm_sec_link_key_request
+** Function         btm_send_link_key_request
 **
 ** Description      This function is called when controller requests link key
 **

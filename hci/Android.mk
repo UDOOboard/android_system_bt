@@ -37,6 +37,23 @@ LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/../utils/include \
     $(bdroid_C_INCLUDES)
 
+ifeq ($(BLUETOOTH_HCI_USE_USB),true)
+LOCAL_SRC_FILES += src/hci_hal_usb.c 
+LOCAL_CFLAGS += -DHCI_USE_USB
+LOCAL_SHARED_LIBRARIES := \
+	  libcutils \
+	  libdl \
+	  liblog \
+	  libusb
+
+LOCAL_STAITC_LIBRARIES := \
+	  libusb
+
+LOCAL_LDLIBS := -lusb
+LOCAL_C_INCLUDES += external/libusb_aah
+endif
+
+
 LOCAL_MODULE := libbt-hci
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := STATIC_LIBRARIES

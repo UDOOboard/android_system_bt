@@ -40,6 +40,11 @@ LOCAL_SRC_FILES := \
     src/interop.c
 
 LOCAL_CFLAGS := -std=c99 $(bdroid_CFLAGS)
+
+ifeq ($(BLUETOOTH_HCI_USE_USB),true)
+LOCAL_CFLAGS += -DHCI_USE_USB
+endif
+
 LOCAL_MODULE := libbtdevice
 LOCAL_MODULE_TAGS := optional
 LOCAL_SHARED_LIBRARIES := libc liblog

@@ -133,6 +133,10 @@ LOCAL_SHARED_LIBRARIES := \
     libpower \
     libz
 
+ifeq ($(BLUETOOTH_HCI_USE_USB),true)
+    LOCAL_SHARED_LIBRARIES += libusb
+endif
+
 LOCAL_STATIC_LIBRARIES := \
     libtinyxml2 \
     libbt-qcom_sbc_decoder
