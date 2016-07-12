@@ -106,6 +106,9 @@ static void parse_read_local_extended_features_response(
     STREAM_TO_UINT8(*page_number_ptr, stream);
     STREAM_TO_UINT8(*max_page_number_ptr, stream);
 
+#ifdef FORCE_EXTENDED_FEATURE_PAGE_NUMBER_1
+    *max_page_number_ptr = 0x01;  // BT USB DONGLE DOES NOT REPLY THE RIGHT MAX PAGE NUMBER
+#endif
     assert(*page_number_ptr < feature_pages_count);
     STREAM_TO_ARRAY(feature_pages[*page_number_ptr].as_array, stream, (int)sizeof(bt_device_features_t));
   } else {

@@ -388,9 +388,7 @@ static uint16_t get_acl_packet_size_ble(void) {
 
 static uint16_t get_ble_suggested_default_data_length(void) {
   assert(readable);
-#ifndef HCI_USE_USB
   assert(ble_supported);
-#endif
   return ble_suggested_default_data_length;
 }
 
@@ -407,17 +405,13 @@ static uint8_t get_acl_buffer_count_ble(void) {
 
 static uint8_t get_ble_white_list_size(void) {
   assert(readable);
-#ifndef HCI_USE_USB
   assert(ble_supported);
-#endif
   return ble_white_list_size;
 }
 
 static uint8_t get_ble_resolving_list_max_size(void) {
   assert(readable);
-#ifndef HCI_USE_USB
   assert(ble_supported);
-#endif
   return ble_resolving_list_max_size;
 }
 
