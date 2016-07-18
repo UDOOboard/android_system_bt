@@ -35,12 +35,14 @@
 #include "btcore/include/version.h"
 
 const bt_event_mask_t BLE_EVENT_MASK = { "\x00\x00\x00\x00\x00\x00\x06\x7f" };
+const bt_event_mask_t BLE_EVENT_MASK_USB = { "\x00\x00\x00\x00\x00\x00\x00\x1f" };
 
 #if (BLE_INCLUDED)
 const bt_event_mask_t CLASSIC_EVENT_MASK = { HCI_DUMO_EVENT_MASK_EXT };
 #else
 const bt_event_mask_t CLASSIC_EVENT_MASK = { HCI_LISBON_EVENT_MASK_EXT };
 #endif
+const bt_event_mask_t CLASSIC_EVENT_MASK_USB = { "\x3d\xbf\xf8\x07\xff\xfb\xff\xff" };
 
 // TODO(zachoverflow): factor out into common module
 const uint8_t SCO_HOST_BUFFER_SIZE = 0xff;
@@ -231,13 +233,21 @@ static future_t *start_up(void) {
     }
 
     // Set the ble event mask next
+#ifdef HCI_USE_USB
+    response = AWAIT_COMMAND(packet_factory->make_ble_set_event_mask(&BLE_EVENT_MASK_USB));
+#else
     response = AWAIT_COMMAND(packet_factory->make_ble_set_event_mask(&BLE_EVENT_MASK));
+#endif
     packet_parser->parse_generic_command_complete(response);
   }
 #endif
 
   if (simple_pairing_supported) {
+#ifdef HCI_USE_USB
+    response = AWAIT_COMMAND(packet_factory->make_set_event_mask(&CLASSIC_EVENT_MASK_USB));
+#else
     response = AWAIT_COMMAND(packet_factory->make_set_event_mask(&CLASSIC_EVENT_MASK));
+#endif
     packet_parser->parse_generic_command_complete(response);
   }
 
